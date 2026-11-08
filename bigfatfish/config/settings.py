@@ -27,8 +27,8 @@ class Settings:
     # ========== 记忆系统配置 ==========
     # Redis 短期记忆
     REDIS_HOST: str = field(default_factory=lambda: os.getenv("REDIS_HOST", "localhost"))
-    REDIS_PORT: int = field(default_factory=lambda: int(os.getenv("REDIS_PORT", "6379")))
-    REDIS_DB: int = field(default_factory=lambda: int(os.getenv("REDIS_DB", "0")))
+    REDIS_PORT: int = field(default_factory=lambda: int(os.getenv("REDIS_PORT") or "6379"))
+    REDIS_DB: int = field(default_factory=lambda: int(os.getenv("REDIS_DB") or "0"))
     REDIS_PASSWORD: Optional[str] = field(default_factory=lambda: os.getenv("REDIS_PASSWORD"))
     
     # ChromaDB 长期记忆
