@@ -1,0 +1,23 @@
+# Render 一键部署配置
+# 使用方式：把项目 push 到 GitHub，在 Render 仪表盘选择这个 repo
+services:
+  - type: web
+    name: bigfatfish
+    env: docker
+    plan: free
+    region: singapore
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false  # 需要在 Render 控制台手动填
+      - key: QQ_BOT_QQ
+        value: "2500694598"
+      - key: QQ_ENABLED
+        value: "true"
+      - key: QQ_WS_MODE
+        value: "reverse"
+      - key: QQ_WEBSOCKET_URL
+        value: "ws://0.0.0.0:3001"
+      - key: WEB_UI_HOST
+        value: "0.0.0.0"
+      - key: WEB_UI_PORT
+        value: "8080"

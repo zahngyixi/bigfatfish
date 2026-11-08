@@ -1,0 +1,95 @@
+# ============================================================
+# 大肥鱼 AI 伴侣 - Python 依赖 (ARM64 Termux 完全兼容)
+# ============================================================
+# 目标环境: Android Termux (aarch64 / ARM64)
+# Python 版本: 3.10+ (建议 3.11)
+#
+# 安装说明:
+#   Termux 环境安装: bash deploy.sh
+#   或手动: pip install -r requirements.txt
+# ============================================================
+
+# ==================== 核心框架 ====================
+# 环境变量管理
+python-dotenv==1.0.1
+
+# 异步 HTTP 客户端 (ARM64 纯 Python，无 C 扩展依赖)
+aiohttp==3.9.5
+httpx==0.27.0
+
+# WebSocket 支持 (QQ/B站接入)
+websockets==12.0
+
+# ==================== DeepSeek API ====================
+# 无需额外库，使用 aiohttp/httpx 直接调用
+
+# ==================== 记忆系统 ====================
+# Redis 客户端 (ARM64 官方支持)
+redis==5.0.4
+
+# ChromaDB 向量数据库 (>=0.4.x 支持 ARM64，使用 DuckDB 后端)
+chromadb==0.4.24
+
+# ==================== 多模态 - 语音合成 (TTS) ====================
+# edge-tts: 纯 Python，调用微软在线 TTS，ARM64 完美兼容
+edge-tts==6.1.12
+
+# pyttsx3: 备用本地 TTS (需要 Termux: pkg install espeak)
+pyttsx3==2.90
+
+# ==================== 多模态 - 语音识别 (ASR) ====================
+# sherpa-onnx: 官方提供 aarch64 wheel，推荐
+# 需要单独下载模型: https://github.com/k2-fsa/sherpa-onnx/releases
+sherpa-onnx==1.10.16
+
+# faster-whisper: CTranslate2 后端，ARM64 官方支持
+faster-whisper==1.0.3
+
+# 音频处理 (转换格式，需要系统安装 ffmpeg: pkg install ffmpeg)
+pydub==0.25.1
+
+# numpy (音频处理依赖，ARM64 官方 wheel)
+numpy==1.26.4
+
+# ==================== 平台接入 ====================
+# Bilibili API (纯 Python，ARM64 兼容)
+bilibili-api-python==16.2.0
+
+# ==================== Web UI 服务器 ====================
+# aiohttp 已在上面安装
+
+# 二维码生成 (方便手机扫码访问)
+qrcode[pil]==7.4.2
+Pillow==10.3.0
+
+# ==================== 工具库 ====================
+# 日期时间处理
+python-dateutil==2.9.0
+
+# JSON 处理
+orjson==3.10.3
+
+# ==================== 可选：文生图 ====================
+# 如果启用本地 SD，需要以下依赖 (建议通过 API 调用，不在手机本地运行)
+# diffusers==0.27.2
+# transformers==4.40.0
+# torch==2.3.0+cpu  # ARM64 Termux 安装 torch 非常困难，不推荐
+
+# ==================== 注意事项 ====================
+# 1. Termux 环境需要先安装系统依赖:
+#    pkg update && pkg upgrade
+#    pkg install python python-pip
+#    pkg install rust  # chromadb 编译依赖
+#    pkg install ffmpeg  # 音频处理
+#    pkg install espeak  # pyttsx3 备用 TTS
+#    pkg install redis  # Redis 服务器
+#
+# 2. sherpa-onnx 模型需要单独下载到 models/sherpa-onnx/ 目录
+#    推荐模型: sherpa-onnx-streaming-zipformer-zh-14M-2023-02-23
+#    下载链接: https://github.com/k2-fsa/sherpa-onnx/releases
+#
+# 3. ChromaDB 在 ARM64 上首次安装可能需要编译，耗时较长（约 5-10 分钟）
+#
+# 4. 如果某些包在 Termux 安装失败，可以尝试:
+#    pip install --no-binary :all: <package_name>
+#    或使用 --only-binary :all: 强制使用 wheel

@@ -1,0 +1,66 @@
+大肥鱼 AI 伴侣项目结构
+=====================
+
+bigfatfish/
+├── core/                          # 核心大脑
+│   ├── __init__.py
+│   ├── deepseek_agent.py          # DeepSeek API 交互 + 流式处理
+│   ├── memory_manager.py          # 长短期记忆管理
+│   ├── persona_engine.py          # 人设系统 + 情感逻辑
+│   └── context_compressor.py      # 上下文压缩 + Token 管理
+│
+├── gateway/                       # 全平台消息网关
+│   ├── __init__.py
+│   ├── base_platform.py           # 平台基类
+│   ├── qq_adapter.py              # QQ (NapCat/Lagrange)
+│   ├── bilibili_adapter.py        # B站接入
+│   ├── router.py                  # 消息路由与分发
+│   └── frequency_control.py       # 频控防风控
+│
+├── memory/                        # 记忆存储层
+│   ├── __init__.py
+│   ├── redis_cache.py             # 短期内存 (Redis)
+│   ├── chromadb_store.py          # 长期记忆 (ChromaDB)
+│   └── memory_extractor.py        # 自动提取关键事实
+│
+├── multimodal/                    # 多模态交互
+│   ├── __init__.py
+│   ├── asr_engine.py              # 语音识别 (sherpa-onnx)
+│   ├── tts_engine.py              # 语音合成 (Edge-TTS)
+│   ├── emotion_system.py          # 表情包系统 + 情绪标签
+│   └── image_gen.py               # 文生图 (HF/SD API)
+│
+├── visual/                        # 视觉呈现
+│   ├── __init__.py
+│   ├── live2d_renderer.py         # Live2D 渲染 + Lip-sync
+│   ├── ui_server.py               # Web UI 服务器
+│   └── assets/                    # 资源目录
+│       ├── live2d_models/         # Live2D 模型文件
+│       ├── emoticon_packs/        # 表情包库 (happy/sad/angry/cute)
+│       └── web/                   # Web 前端
+│           ├── index.html
+│           ├── styles.css
+│           └── app.js
+│
+├── scheduler/                     # 定时任务引擎
+│   ├── __init__.py
+│   └── active_interaction.py      # 主动发起对话
+│
+├── config/                        # 配置文件
+│   ├── __init__.py
+│   ├── settings.py                # 环境变量 + 全局配置
+│   ├── prompts.py                 # Prompt 模板库
+│   └── example.env                # 环境变量示例
+│
+├── utils/                         # 工具函数
+│   ├── __init__.py
+│   ├── logger.py                  # 日志系统
+│   └── helpers.py                 # 辅助函数
+│
+├── main.py                        # 主程序入口
+├── requirements.txt               # 依赖列表
+├── docker-compose.yml             # Docker 编排 (Redis + ChromaDB)
+├── Dockerfile                     # 容器配置
+├── deploy.sh                      # 部署脚本 (Linux/Termux)
+├── deploy.bat                     # 部署脚本 (Windows)
+└── README.md                      # 项目文档

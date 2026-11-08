@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="大肥鱼 AI 伴侣 - 基于 DeepSeek 的手机端 AI 虚拟伴侣">
+
+  <!-- PWA / 添加到主屏幕后呈现为独立 APP -->
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/static/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="大肥鱼">
+
+  <link rel="stylesheet" href="/static/styles.css">
+  <title>大肥鱼 · AI 伴侣</title>
+</head>
+<body data-emotion="neutral">
+
+  <!-- ============ 开机动画 ============ -->
+  <div id="boot" class="boot">
+    <canvas id="boot-canvas"></canvas>
+    <div class="boot-inner">
+      <div class="boot-fish">🐟</div>
+      <h1 class="boot-title">大肥鱼</h1>
+      <p class="boot-sub">正在游向你…</p>
+      <div class="boot-bar"><span id="boot-progress"></span></div>
+      <p class="boot-tip" id="boot-tip">唤醒记忆中</p>
+    </div>
+  </div>
+
+  <!-- ============ 动态液态玻璃壁纸 ============ -->
+  <div id="wallpaper" class="wallpaper">
+    <div class="blob blob-a"></div>
+    <div class="blob blob-b"></div>
+    <div class="blob blob-c"></div>
+    <div class="glass-grain"></div>
+  </div>
+
+  <!-- ============ Live2D 舞台 ============ -->
+  <main class="stage" id="stage">
+    <div class="stage-top glass">
+      <span class="dot" id="status-dot"></span>
+      <span id="status-text">连接中…</span>
+      <span class="stage-spacer"></span>
+      <span class="emotion-badge" id="emotion-badge">平静</span>
+      <button class="icon-btn" id="btn-settings" aria-label="设置">⚙</button>
+    </div>
+
+    <div class="avatar-wrap" id="avatar-wrap">
+      <!-- Live2D 渲染画布（有模型时启用） -->
+      <canvas id="live2d-canvas"></canvas>
+      <!-- 无模型时的内置降级形象 -->
+      <div id="fallback-avatar" class="fallback-avatar">
+        <div class="fish-body">
+          <div class="fish-eye left"></div>
+          <div class="fish-eye right"></div>
+          <div class="fish-blush left"></div>
+          <div class="fish-blush right"></div>
+          <div class="fish-mouth" id="fish-mouth"></div>
+        </div>
+        <div class="fish-tail"></div>
+        <div class="fish-bubble b1"></div>
+        <div class="fish-bubble b2"></div>
+        <div class="fish-bubble b3"></div>
+      </div>
+    </div>
+
+    <div class="speech-bubble glass" id="speech-bubble">
+      <span id="speech-text">你好呀，我在这儿~</span>
+    </div>
+  </main>
+
+  <!-- ============ 聊天悬浮窗 ============ -->
+  <section class="chat-panel glass" id="chat-panel">
+    <header class="chat-head" id="chat-head">
+      <span class="chat-title">💬 和大肥鱼聊天</span>
+      <button class="icon-btn" id="btn-collapse" aria-label="收起">▾</button>
+    </header>
+
+    <div class="chat-body" id="chat-body">
+      <div class="msg ai">
+        <div class="bubble">你好呀~ 我是大肥鱼 🐟 有什么想聊的吗？</div>
+      </div>
+    </div>
+
+    <div class="chat-input-row">
+      <button class="icon-btn" id="btn-voice" aria-label="语音输入">🎤</button>
+      <input id="chat-input" type="text" placeholder="说点什么…" autocomplete="off">
+      <button class="send-btn" id="btn-send" aria-label="发送">➤</button>
+    </div>
+  </section>
+
+  <!-- ============ 设置面板 ============ -->
+  <div class="modal-mask" id="settings-mask" hidden>
+    <div class="modal glass">
+      <h2>设置</h2>
+
+      <label class="field">
+        <span>后端地址</span>
+        <input id="cfg-server" type="url" placeholder="http://127.0.0.1:8080">
+        <small>Termux 本机填 127.0.0.1；云端填 https://你的域名</small>
+      </label>
+
+      <label class="field">
+        <span>称呼</span>
+        <input id="cfg-user" type="text" placeholder="我">
+      </label>
+
+      <label class="field field-row">
+        <span>语音回复</span>
+        <input id="cfg-tts" type="checkbox" checked>
+      </label>
+
+      <label class="field">
+        <span>自定义壁纸 URL（留空使用默认）</span>
+        <input id="cfg-wallpaper" type="url" placeholder="https://...">
+      </label>
+
+      <label class="field">
+        <span>Live2D 模型名（放在 /live2d/ 下）</span>
+        <input id="cfg-model" type="text" placeholder="留空则使用内置形象">
+      </label>
+
+      <div class="modal-actions">
+        <button class="ghost-btn" id="btn-clear-chat">清空聊天</button>
+        <button class="primary-btn" id="btn-save">保存</button>
+      </div>
+      <p class="modal-note" id="settings-note"></p>
+    </div>
+  </div>
+
+  <!-- 隐藏的音频元素，用于 TTS 播放与口型同步 -->
+  <audio id="tts-audio" crossorigin="anonymous"></audio>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+# ============================================================
+# 大肥鱼 AI 伴侣 - 轻量依赖 (无原生 C 扩展 / 免编译)
+# ============================================================
+# 适用场景：
+#   1. Chaquopy / python-for-android 等「把 Python 塞进 APK」方案
+#   2. 极简云端部署（不想编译 chromadb / sherpa-onnx）
+#   3. 只想先跑通 QQ 机器人 + Web UI 的最小验证
+#
+# 安装: pip install -r requirements-lite.txt
+# 若 aiohttp 编译失败，加环境变量 AIOHTTP_NO_EXTENSIONS=1 走纯 Python 模式
+# ============================================================
+
+# ---------- 核心 ----------
+python-dotenv==1.0.1
+aiohttp==3.9.5
+httpx==0.27.0
+websockets==12.0
+
+# ---------- 记忆 ----------
+# Redis 客户端是纯 Python；连不上时自动降级为进程内字典
+redis==5.0.4
+
+# ⚠ 不含 chromadb：长期向量记忆将不可用，只保留短期记忆
+#    如需长期记忆，请改用完整 requirements.txt
+
+# ---------- 语音 ----------
+# edge-tts 纯 Python，走微软在线接口，ARM64 / Chaquopy 均可用
+edge-tts==6.1.12
+# ⚠ 不含 sherpa-onnx / faster-whisper / pydub / numpy：
+#    QQ 语音消息识别（ASR）自动降级为「不处理语音，仅回复文字」
+#    语音合成（TTS）仍然可用
+
+# ---------- 平台 ----------
+bilibili-api-python==16.2.0
+
+# ---------- Web UI ----------
+# Pillow 提供 aarch64 wheel，Chaquopy / p4a 也有对应 recipe
+Pillow==10.3.0
+qrcode==7.4.2
+
+# ---------- 工具 ----------
+python-dateutil==2.9.0
+
+# ============================================================
+# 降级行为一览（代码已内置 try/except，缺包不会崩溃）
+# ------------------------------------------------------------
+# 缺失                → 降级结果
+# chromadb             → 长期记忆不可用，短期记忆（Redis/内存）正常
+# redis                → 短期记忆改用进程内字典，重启后清空
+# sherpa-onnx          → 尝试 faster-whisper；再失败则跳过语音识别
+# pydub / numpy        → ASR 音频解码不可用
+# edge-tts             → 尝试 pyttsx3（需系统 espeak）；再失败则只回文字
+# Pillow / qrcode      → 启动时不打印二维码，手动访问 URL 即可
+# bilibili-api-python  → B站适配器启动失败（.env 里关掉 BILIBILI_ENABLED）
+# ============================================================

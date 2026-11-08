@@ -1,0 +1,17 @@
+﻿# 临时公开部署包
+
+这个压缩包可以直接上传到 Render / Railway / Zeabur 等平台。
+
+## 快速部署到 Render：
+
+1. 解压这个 zip
+2. 打开 https://dashboard.render.com/
+3. New + → Web Service → Deploy from GitHub (选择 Docker)
+4. 或者选择 "Upload from local"，把解压后的文件夹拖进去
+
+环境变量：
+- DEEPSEEK_API_KEY = sk-f961f2ab7a294ad5b4a7fc1322923b33
+- QQ_BOT_QQ = 2500694598
+- PORT = 8080
+
+鲸鱼娘人格已启用（嘴硬傲娇、能联网搜索）

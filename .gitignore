@@ -1,0 +1,54 @@
+# ============================================================
+# 大肥鱼 AI 伴侣 - Git 忽略规则
+# ⚠ 重要：.env 含 DeepSeek API Key / B站 Cookie，绝不能提交
+# ============================================================
+
+# ---------- 密钥与本地配置 ----------
+.env
+.env.*
+!.env.example
+!bigfatfish/config/example.env
+
+# ---------- 运行时数据 ----------
+data/
+logs/
+bigfatfish/logs/
+bigfatfish/tts_output/
+tts_output/
+*.log
+*.db
+*.sqlite3
+
+# ---------- 模型与大文件 ----------
+models/
+*.onnx
+*.bin
+*.tar.bz2
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# ---------- Android 构建产物 ----------
+*.apk
+*.aab
+android-webview/.gradle/
+android-webview/build/
+android-webview/app/build/
+android-webview/local.properties
+android-webview/.idea/
+android-webview/gradle/wrapper/gradle-wrapper.jar
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---------- 生成的图片（可选保留） ----------
+# bigfatfish/visual/assets/emoticon_packs/
+# generated_images/
